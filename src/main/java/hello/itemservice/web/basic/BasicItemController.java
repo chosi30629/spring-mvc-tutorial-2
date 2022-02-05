@@ -59,7 +59,7 @@ public class BasicItemController {
 		
 		model.addAttribute("item", item);
 		
-		return "/basic/item";	// model 에 itemId 가 있기 때문에 상세 페이지로 이동 됨 
+		return "/basic/item";	// model 에 itemId 가 있기 때문에 상세 페이지로 이동 됨, 리다이렉트는 아님 
 	}
 
 //	@PostMapping("/add")
@@ -81,6 +81,19 @@ public class BasicItemController {
 	public String addItemV4(Item item) {	// 어노테이션 생략 시 복잡한 객체일 경우  @ModelAttribute 기본 설정
 		itemRepository.save(item);
 		return "/basic/item";
+	}
+	
+	@GetMapping("/{itemId}/edit")
+	public String editForm(@PathVariable Long itemId, Model model) {
+		Item item = itemRepository.findById(itemId);
+		model.addAttribute("item", item);
+		return "/basic/editForm";
+	}
+
+	@PostMapping("/{itemId}/edit")
+	public String edit(@PathVariable Long itemId, @ModelAttribute Item item) {
+		itemRepository.update(itemId, item);
+		return "redirect:/basic/items/{itemId}";
 	}
 	
 	/**
