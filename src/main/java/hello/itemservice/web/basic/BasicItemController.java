@@ -59,7 +59,7 @@ public class BasicItemController {
 		
 		model.addAttribute("item", item);
 		
-		return "/basic/item";	// model 에 itemId 가 있기 때문에 상세 페이지로 이동 됨, 리다이렉트는 아님 
+		return "/basic/item";	// model 에 있는 item 을 가지고 상세 페이지 뷰로 이동 됨, 리다이렉트는 아님, 새로고침 시 계속 add post 호출됨
 	}
 
 //	@PostMapping("/add")
@@ -77,10 +77,16 @@ public class BasicItemController {
 		return "/basic/item";
 	}
 	
-	@PostMapping("/add")
+//	@PostMapping("/add")
 	public String addItemV4(Item item) {	// 어노테이션 생략 시 복잡한 객체일 경우  @ModelAttribute 기본 설정
 		itemRepository.save(item);
 		return "/basic/item";
+	}
+	
+	@PostMapping("/add")
+	public String addItemV5(Item item) {
+		itemRepository.save(item);
+		return "redirect:/basic/items/" + item.getId();
 	}
 	
 	@GetMapping("/{itemId}/edit")
